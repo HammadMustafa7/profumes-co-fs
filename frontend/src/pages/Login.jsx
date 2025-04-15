@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react'
 import axios from 'axios'
-import {  ShopContext } from '../context/ShopContext';
+import { ShopContext } from '../context/ShopContext';
 import { toast } from 'react-toastify';
+import { Eye, EyeOff } from 'lucide-react'
 const Login = () => {
 
   const [currentState, setCurrentState] = useState('Login');
@@ -11,6 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -23,24 +25,24 @@ const Login = () => {
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem('token_p.co', response.data.token);
-          
+
         }
         else {
           toast.error(response.data.message);
         }
       } else {
-          const response = await axios.post(`${backendUrl}/api/user/login`, { email, password })
-          console.log(response.data);
+        const response = await axios.post(`${backendUrl}/api/user/login`, { email, password })
+        console.log(response.data);
 
-          if (response.data.success) {
-            setToken(response.data.token);
-            localStorage.setItem('token_p.co', response.data.token);
-            
-          }
-          else {
-            toast.error(response.data.message);
-          }
-        
+        if (response.data.success) {
+          setToken(response.data.token);
+          localStorage.setItem('token_p.co', response.data.token);
+
+        }
+        else {
+          toast.error(response.data.message);
+        }
+
       }
     } catch (error) {
       console.log(error);
@@ -51,8 +53,8 @@ const Login = () => {
     }
   }
 
-  useEffect(()=>{
-    if(token){
+  useEffect(() => {
+    if (token) {
       navigate('/')
     }
   }, [token])
@@ -70,7 +72,21 @@ const Login = () => {
       </div>
       {currentState === 'Sign Up' ? <input onChange={(e) => setName(e.target.value)} type="text" className='w-full px-3 py-2 border border-gray-800' placeholder='Name' required /> : ``}
       <input onChange={(e) => setEmail(e.target.value)} type="email" className='w-full px-3 py-2 border border-gray-800' placeholder='Email' required />
-      <input onChange={(e) => setPassword(e.target.value)} type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required />
+      <div className='w-full relative'>
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          type={showPassword ? "text" : "password"}
+          className='w-full px-3 py-2 border border-gray-800'
+          placeholder='Password'
+          required
+        />
+        <div
+          className='absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer'
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? <EyeOff /> : <Eye />}
+        </div>
+      </div>
 
       <div className='w-full flex justify-between text-sm mt-[-8x]'>
         <p className='cursor-pointer'> Forgot your password? </p>

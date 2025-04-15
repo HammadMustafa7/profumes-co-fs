@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
     const [visible, setVisible] = useState(false)
     const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = useContext(ShopContext);
-
+    const [showMenu, setShowMenu] = useState(false);
     const Logout = () => {
         navigate('/login')
         localStorage.removeItem('token_p.co')
@@ -16,6 +16,16 @@ const Navbar = () => {
         setCartItems({});
 
     }
+    const handleUserClick = () => {
+        if (!token) {
+            navigate('/login');
+        } else {
+            setShowMenu(prev => !prev); // Toggle dropdown on click
+        }
+    };
+
+    const handleClose = () => setShowMenu(false); // optional: close on click elsewhere
+
     return (
         <div>
             <nav className="flex justify-between items-center py-4 font-medium">
@@ -43,18 +53,22 @@ const Navbar = () => {
                         navigate('/collection');
                     }} size={24} className=' w-6 cursor-pointer' />
 
-                    <div className='relative group'>
-                        <User onClick={() => token ? null : navigate('/login')} size={24} className=' w-6 cursor-pointer' />
-                        {token &&
-                            <div className='group-hover:block hidden absolute dropdown-menu pt-4 right-0'>
-                                <div className='flex flex-col gap-2 w-32 font-medium py-3 px-5  bg-slate-100 text-gray-500 rounded'>
-                                    <p className='cursor-pointer hover:text-black'> My Profile </p>
-                                    <p onClick={() => navigate('/orders')} className='cursor-pointer hover:text-black'> Orders </p>
-                                    <p onClick={Logout} className='cursor-pointer hover:text-black'> Logout </p>
+                    <div className='relative'>
+                        <User
+                            onClick={handleUserClick}
+                            size={24}
+                            className='w-6 cursor-pointer'
+                        />
+
+                        {token && showMenu && (
+                            <div className='absolute right-0 mt-2 z-50'>
+                                <div className='flex flex-col gap-2 w-32 font-medium py-3 px-5 bg-slate-100 text-gray-500 rounded shadow'>
+                                    <p className='cursor-pointer hover:text-black'>My Profile</p>
+                                    <p onClick={() => { navigate('/orders'); handleClose(); }} className='cursor-pointer hover:text-black'>Orders</p>
+                                    <p onClick={() => { Logout(); handleClose(); }} className='cursor-pointer hover:text-black'>Logout</p>
                                 </div>
                             </div>
-                        }
-
+                        )}
                     </div>
                     <Link to="/cart" className='relative'>
                         <FaBagShopping size={24} className=' w-6 cursor-pointer' />

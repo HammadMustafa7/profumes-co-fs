@@ -7,7 +7,7 @@ import NumberInput from '../components/NumberInput';
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart } = useContext(ShopContext);
+  const { products, currency, addToCart, token, navigate } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
@@ -63,11 +63,20 @@ const Product = () => {
           <div>
             <NumberInput setNumber={setQuantity} />
           </div>
-          <button
+          {token ? (
+            <button
             onClick={() => {
               addToCart(productData._id, quantity); // use current value
               setQuantity(1); // reset after
             }} className=' mt-4 bg-black text-white cursor-pointer px-8 py-3 text-sm active:bg-gray-700'>ADD TO CART </button>
+          ): (
+            <button
+            onClick={() => {
+              navigate('/login');
+            }} className=' mt-4 bg-black text-white cursor-pointer px-8 py-3 text-sm active:bg-gray-700'>ADD TO CART </button>
+          )}
+          
+          
           <hr className='mt-6 sm:w-4/5 ' />
           <div className='mt-5'>
             <ul className='flex flex-col gap-2'>
