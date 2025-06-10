@@ -26,4 +26,10 @@ app.use('/api/product', productRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/order', OrderRouter)
 
+
+// use app.listen when you are not using vercel or any other serverless platform when working on a local server
+// app.listen(process.env.PORT || 5000, () => {
+//     console.log(`Server is running on port ${process.env.PORT || 5000}`);
+// });
+
 export default app;

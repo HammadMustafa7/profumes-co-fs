@@ -84,7 +84,10 @@ const Product = ({ token }) => {
     formData.append('category', JSON.stringify(newCategories));
     formData.append('bestSeller', newBestSeller);
 
-    
+    // New Update: now you can upload a new image or keep the existing one
+    if (image && typeof image !== 'string') { // Ensure it's a File object, not a URL
+        formData.append('image', image);
+    }
 
     try {
       setLoading(true);      
@@ -112,7 +115,7 @@ const Product = ({ token }) => {
         <div className='flex'>
           <label className='cursor-pointer' htmlFor="image">
             <img className='w-26' src={!image ? assets.upload_area : typeof image === 'string' ? image : URL.createObjectURL(image)} alt="Product" />
-            <input readOnly type="file" id="image" hidden />
+            <input onChange={(e) => setImage(e.target.files[0])} type="file" id="image" hidden />
           </label>
         </div>
       </div>

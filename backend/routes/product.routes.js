@@ -10,7 +10,7 @@ productRouter.post('/remove',adminAuth, removeProduct)
 productRouter.get('/single',adminAuth, singleProduct)
 productRouter.get('/list', listProducts)
 // updating the product
-productRouter.patch('/update/:productId', adminAuth, upload.none(), updateProduct);
+productRouter.patch('/update/:productId', adminAuth, upload.single('image'), updateProduct);
 
 
 
